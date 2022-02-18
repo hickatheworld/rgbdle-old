@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;500&display=swap&font=Material+Icons');
+
+
+html,
+body {
+	padding: 0;
+	margin: 0;
+	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+		Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+	height: 100%;
+	width: 100%;
+	background: #eeeeee;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+.window-container {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	z-index: 99999;
+	background-color: rgba(0, 0, 0, 0.5);
+	backdrop-filter: blur(3px);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	filter: blur(30px);
+	opacity: 0;
+	pointer-events: none;
+	transition: .3s ease;
+}
+
+.window-container.open {
+	display: flex;
+	filter: blur(0px);
+	opacity: 1;
+	pointer-events: all;
+}
+
+.window {
+	position: relative;
+	width: 90%;
+	height: 90%;
+	padding: 10px;
+	background: #eeeeee;
+	color: #111111;
+	font: 10pt 'Roboto Slab';
+	border-radius: 7px;
+	box-shadow: 0 10px 10px rgba(0, 0, 0, 0.5);
+	overflow-y: auto;
+}
+
+.window-close {
+	position: absolute;
+	right: 0;
+	top: 0;
+	cursor: pointer;
+}
+
+.window-title {
+	text-align: center;
+	font: 500 15pt 'Roboto Slab';
+	margin: 5px 0;
+}
+
+
+@media screen and (min-width: 768px) {
+	.window {
+		width: 500px;
+		font-size: 12pt;
+	}
+}
+
+@media screen and (min-height: 425px) {
+	.window {
+		height: auto;
+	}
+}

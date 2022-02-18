@@ -1,0 +1,19 @@
+.guide-line {
+	margin: 5px 0;
+	padding: 0 20px;
+	text-align: center;
+}
+
+.guide-separator {
+	width: 80%;
+	height: 1px;
+	background: #111111;
+	margin: 10px 10%;
+}
+
+	
+@media screen and (min-width: 768px) {
+	.guide-line {
+		text-align: center;
+	}
+}
