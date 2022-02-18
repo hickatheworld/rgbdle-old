@@ -78,6 +78,23 @@ export default function Home({color}) {
 				<meta property='twitter:title' content='RGBdle' />
 				<meta property='twitter:description' content={'RGBdle: Demonstrate your skills in design by guessing the RGB code of each day\'s color!'} />
 				<meta property='twitter:image' content='https://rgbdle.hicka.world/banner.png' />
+				<script
+					async
+					src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`}
+				/>
+				<script
+					dangerouslySetInnerHTML={{
+						__html: `
+			window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}', {
+              page_path: window.location.pathname,
+            });
+          `,
+					}}
+				/>
+
 			</Head>
 			<style>{`#ribon a{background:#a00;color:#fff;text-decoration:none;font-family:arial,sans-serif;text-align:center;font-weight:bold;padding:5px 20px;font-size:1rem;line-height:2rem;position:relative;transition:0.5s;}@media screen and (min-width:800px){#ribon{position:absolute;display:block;top:0;left:0;width:400px;overflow:hidden;height:200px;z-index:9999;}#ribon a{width:200px;position:absolute;top:30px;left:-50px;transform:rotate(-45deg);-webkit-transform:rotate(-45deg);-ms-transform:rotate(-45deg);-moz-transform:rotate(-45deg);-o-transform:rotate(-45deg);box-shadow:4px 4px 10px rgba(0,0,0,0.8);}}`}</style>
 			<span id='ribon'><a href='#'>Currently indev</a></span>
