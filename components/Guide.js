@@ -19,7 +19,7 @@ export default function Guide({isOpen, close}) {
 				</div>
 				<div className='guide-separator'></div>
 				<div className='window-title'>Example</div>
-				<RGBdleRow entry={[25, 120, 11]} expected={[25, 12, 145]} status='passed' />
+				<RGBdleRow entry={[25, 120, 11]} expected={[25, 12, 145]} lock={[true, false, false]} status='passed' />
 				<div className='guide-line'>
 					The value of the <b>red</b> level is <b>correct</b>.
 				</div>

@@ -1,91 +1,81 @@
 import {useRef} from 'react';
 import {MdOutlineArrowForward} from 'react-icons/md';
 
-export default function RgbdleRow({entry, expected, status, submit}) {
-	let redCellColor,
-		greenCellColor,
-		blueCellColor;
+export default function RgbdleRow({entry, expected, status, submit, lock}) {
+	let cellColors = Array(3).fill('#1e293b');
+	let resultColor = 'transparent';
 	if (status === 'passed') {
-		redCellColor = (entry[0] === expected[0]) ? '#49da1e' : (entry[0] < expected[0]) ? '#da1e8c' : '#e9900a';
-		greenCellColor = (entry[1] === expected[1]) ? '#49da1e' : (entry[1] < expected[1]) ? '#da1e8c' : '#e9900a';
-		blueCellColor = (entry[2] === expected[2]) ? '#49da1e' : (entry[2] < expected[2]) ? '#da1e8c' : '#e9900a';
+		cellColors = cellColors.map((_, i) => (entry[i] === expected[i]) ? '#49da1e' : (entry[i] < expected[i]) ? '#da1e8d' : '#e9900a');
+		resultColor = `rgb(${entry[0]}, ${entry[1]}, ${entry[2]})`;
 	}
-	const redRef = useRef(),
-		greenRef = useRef(),
-		blueRef = useRef();
+	const refs = [useRef(), useRef(), useRef()];
 	let onSubmit;
 	if (status === 'current') {
 		onSubmit = () => {
-			const red = parseInt(redRef.current.value) ?? -1;
-			const green = parseInt(greenRef.current.value) ?? -1;
-			const blue = parseInt(blueRef.current.value) ?? -1;
-			if (red < 0 || red > 255)
-				redRef.current.classList.add('error');
-			else
-				redRef.current.classList.remove('error');
-			if (green < 0 || green > 255)
-				greenRef.current.classList.add('error');
-			else
-				greenRef.current.classList.remove('error');
-			if (blue < 0 || blue > 255)
-				blueRef.current.classList.add('error');
-			else
-				blueRef.current.classList.remove('error');
-			if (red >= 0 && red <= 255 && green >= 0 && green <= 255 && blue >= 0 && blue <= 255)
-				submit(red, green, blue);
+			const values = refs.map(r => parseInt(r.current.value));
+			let err = false;
+			for (const i in values) {
+				const v = values[i];
+				if (v < 0 || v > 255 || isNaN(v)) {
+					refs[i].current.classList.add('border-red-500');
+					err = true;
+				}
+				else
+					refs[i].current.classList.remove('border-red-500');
+			}
+			if (!err)
+				submit(...values);
 		};
 	}
 
 	return (
-		<div className='rgbdle-row'>
+		<div className='flex flex-row justify-center items-center my-3'>
 			{status === 'current' &&
 				<>
-					<div className='rgbdle-input-cell'>
-						<input type='number' pattern='\d*' min={0} max={255} ref={redRef} />
-					</div>
-					<div className='rgbdle-input-cell'>
-						<input type='number' pattern='\d*' min={0} max={255} ref={greenRef} />
-					</div>
-					<div className='rgbdle-input-cell'>
-						<input type='number' pattern='\d*' min={0} max={255} ref={blueRef} />
-					</div>
-					<div className='rgbdle-row-arrow hidden'>
-						<MdOutlineArrowForward size={24}></MdOutlineArrowForward>
-					</div>
-					<button className='rgbdle-submit' onClick={onSubmit}>
+					{
+						refs.map((ref, i) =>
+							<input key={i}
+								ref={ref}
+								type='number'
+								min={0}
+								max={255}
+								pattern='\d*'
+								className='appearance-none border-2 border-gray-700 rounded w-12 h-12 p-2 mx-2 outline-none focus:border-orange-500 text-center transition-colors duration-200'
+								disabled={lock[i]}
+								defaultValue={lock[i] ? expected[i] : ''}
+								data-lpignore={true}
+								data-form-type='other'
+								autocomplete='off'
+							/>
+						)
+					}
+					<button className='cursor-pointer border-2 border-slate-800 rounded w-12 h-12 mx-2 outline-none focus:border-orange-500 text-center bg-slate-800 text-white' onClick={onSubmit}>
 						Enter
 					</button>
 				</>
 			}
-			{status === 'next' &&
+			{status !== 'current' &&
 				<>
-					<div className='rgbdle-row-cell' style={{backgroundColor: '#333333'}}></div>
-					<div className='rgbdle-row-cell' style={{backgroundColor: '#333333'}}></div>
-					<div className='rgbdle-row-cell' style={{backgroundColor: '#333333'}}></div>
-					<div className='rgbdle-row-arrow'>
-						<MdOutlineArrowForward size={24}></MdOutlineArrowForward>
-					</div>
-					<div className='rgbdle-row-cell' style={{backgroundColor: '#333333'}}></div>
-				</>
-			}
-			{status === 'passed' &&
-				<>
-					<div className='rgbdle-row-cell' style={{backgroundColor: redCellColor}}>
-						<div className='rgbdle-row-cell-label'>R</div>
-						<div className='rgbdle-row-cell-value'>{entry[0]}</div>
-					</div>
-					<div className='rgbdle-row-cell' style={{backgroundColor: greenCellColor}}>
-						<div className='rgbdle-row-cell-label'>G</div>
-						<div className='rgbdle-row-cell-value'>{entry[1]}</div>
-					</div>
-					<div className='rgbdle-row-cell' style={{backgroundColor: blueCellColor}}>
-						<div className='rgbdle-row-cell-label'>B</div>
-						<div className='rgbdle-row-cell-value'>{entry[2]}</div>
-					</div>
-					<div className='rgbdle-row-arrow'>
-						<MdOutlineArrowForward size={24}></MdOutlineArrowForward>
-					</div>
-					<div className='rgbdle-row-cell' style={{backgroundColor: `rgb(${entry[0]}, ${entry[1]}, ${entry[2]})`}}></div>
+					{
+						Array(3).fill().map((_, i) =>
+							<div
+								className='w-12 h-12 rounded mx-2 flex flex-col justify-center items-center text-white'
+								style={{backgroundColor: cellColors[i]}}
+							>
+								{status === 'passed' &&
+									<>
+										<div className='text-[10pt]'>{['R', 'G', 'B'][i]}</div>
+										<div className='font-bold text-lg'>{entry[i]}</div>
+									</>
+								}
+							</div>
+						)
+					}
+				<div
+					className='w-12 h-12 bg-transparent rounded mx-2'
+					style={{backgroundColor: resultColor}}
+					title={status === 'passed'  && `This is what rgb(${entry[0]}, ${entry[1]}, ${entry[2]}) looks like!`}
+				></div>
 				</>
 			}
 		</div>

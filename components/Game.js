@@ -35,6 +35,7 @@ export default function Game({color, colorLabel, endGame, save}) {
 						expected={color}
 						submit={submit}
 						key={index}
+						lock={[false, false, false]}
 					/>
 				)}
 			</div>

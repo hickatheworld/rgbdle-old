@@ -1,5 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;500&display=swap&font=Material+Icons');
-
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;500&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 html,
 body {
@@ -19,6 +21,12 @@ a {
 
 * {
 	box-sizing: border-box;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	appearance: none;
+	margin: 0;
 }
 
 .window-container {
