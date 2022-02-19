@@ -45,7 +45,7 @@ export default function RgbdleRow({entry, expected, status, submit, lock}) {
 								defaultValue={lock[i] ? expected[i] : ''}
 								data-lpignore={true}
 								data-form-type='other'
-								autocomplete='off'
+								autoComplete='off'
 							/>
 						)
 					}
@@ -59,6 +59,7 @@ export default function RgbdleRow({entry, expected, status, submit, lock}) {
 					{
 						Array(3).fill().map((_, i) =>
 							<div
+								key={i}
 								className='w-12 h-12 rounded mx-2 flex flex-col justify-center items-center text-white'
 								style={{backgroundColor: cellColors[i]}}
 							>
