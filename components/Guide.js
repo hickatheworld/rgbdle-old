@@ -18,7 +18,7 @@ export default function Guide({isOpen, close}) {
 					and the third guess is the <b style={{color: 'blue'}}>BLUE</b> value.
 				</div>
 				<div className='guide-separator'></div>
-				<div className='guide-title'>Example</div>
+				<div className='window-title'>Example</div>
 				<RGBdleRow entry={[25, 120, 11]} expected={[25, 12, 145]} status='passed' />
 				<div className='guide-line'>
 					The value of the <b>red</b> level is <b>correct</b>.
