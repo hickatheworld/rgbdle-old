@@ -1,13 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;500&display=swap');
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Slab:wght@400;500&display=swap');
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
 html,
 body {
 	padding: 0;
 	margin: 0;
-	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+	font-family: 'Roboto', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
 		Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 	height: 100%;
 	width: 100%;
@@ -23,6 +23,10 @@ a {
 	box-sizing: border-box;
 }
 
+.border-red-500 {
+	border-color: rgb(239 68 68);
+}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
 	appearance: none;
@@ -30,61 +34,31 @@ input::-webkit-inner-spin-button {
 }
 
 .window-container {
-	position: fixed;
-	width: 100%;
-	height: 100%;
-	top: 0;
-	left: 0;
-	z-index: 99999;
-	background-color: rgba(0, 0, 0, 0.5);
-	backdrop-filter: blur(3px);
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	filter: blur(30px);
-	opacity: 0;
-	pointer-events: none;
-	transition: .3s ease;
+	@apply fixed top-0 left-0 w-full h-full z-[1000] bg-black/30 flex items-center justify-center backdrop-blur-sm blur-xl pointer-events-none 
+	transition-all duration-300 opacity-0;
 }
 
 .window-container.open {
-	display: flex;
-	filter: blur(0px);
-	opacity: 1;
-	pointer-events: all;
+	@apply pointer-events-auto opacity-100 blur-0;
+
 }
 
 .window {
-	position: relative;
-	width: 90%;
-	height: 90%;
-	padding: 10px;
-	background: #eeeeee;
-	color: #111111;
-	font: 10pt 'Roboto Slab';
-	border-radius: 7px;
-	box-shadow: 0 10px 10px rgba(0, 0, 0, 0.5);
-	overflow-y: auto;
+	@apply relative w-[90%] max-h-[90%] bg-gray-100 text-black font-slab text-base shadow-xl shadow-black/30 p-10 rounded overflow-y-auto;
 }
 
 .window-close {
-	position: absolute;
-	right: 0;
-	top: 0;
-	cursor: pointer;
+	@apply absolute top-1 right-1 cursor-pointer;
 }
 
 .window-title {
-	text-align: center;
-	font: 500 15pt 'Roboto Slab';
-	margin: 5px 0;
+	@apply text-center font-bold font-slab text-2xl;
 }
 
 
 @media screen and (min-width: 768px) {
 	.window {
-		width: 500px;
-		font-size: 12pt;
+		@apply w-[500px] text-[12pt];
 	}
 }
 

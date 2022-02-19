@@ -1,21 +1,56 @@
 import {MdClose, MdShare} from 'react-icons/md';
 import {useRef} from 'react';
 
-export default function Results({tries, scores, guesses, color, number, showToday, score, isOpen, close}) {
+export default function Results({
+	close,
+	color,
+	day,
+	didGuess,
+	guesses,
+	isOpen,
+	showToday,
+	tries
+}) {
 	const shareTextRef = useRef();
+	const countdownRef = useRef();
 	const distribution = Array(11).fill(0);
 	for (const i of tries) {
-		distribution[i]++;
+		if (i !== -1)
+			distribution[i]++;
 	}
 	console.log(distribution);
 
 	const share = () => {
-		navigator.clipboard.writeText(shareString(guesses, color, number, score));
+		navigator.clipboard.writeText(shareString(guesses, color, day, didGuess));
 		shareTextRef.current.innerText = 'Copied!';
 		setTimeout(() => {
 			shareTextRef.current.innerText = 'Share';
 		}, 3000);
 	};
+
+	if (countdownRef.current) {
+		setInterval(() => {
+			const now = new Date();
+			const next = new Date();
+			next.setDate(next.getDate() + 1);
+			next.setHours(0);
+			next.setMinutes(0);
+			next.setSeconds(0);
+			next.setMilliseconds(0);
+			const diff = next - now;
+			if (diff < 0) {
+				countdownRef.current.innerText = 'Right now!';
+				return;
+			}
+			let hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+			let minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+			let seconds = Math.floor((diff % (1000 * 60)) / 1000);
+			hours = hours < 10 ? '0' + hours : hours;
+			minutes = minutes < 10 ? '0' + minutes : minutes;
+			seconds = seconds < 10 ? '0' + seconds : seconds;
+			countdownRef.current.innerText = `${hours}:${minutes}:${seconds}`;
+		}, 1000)
+	}
 
 	return (
 		<div className={`window-container ${isOpen ? 'open' : ''}`}>
@@ -25,27 +60,37 @@ export default function Results({tries, scores, guesses, color, number, showToda
 				</div>
 				{
 					showToday &&
-					<div className='today'>
-						<div className='today-color' style={{backgroundColor: `rgb(${color[0]}, ${color[1]}, ${color[2]})`}}>
+					<div>
+						<div
+							className='w-48 h-48 rounded ml-[50%] translate-x-[-50%] my-5 flex flex-col justify-center items-center text-center text-white'
+							style={{backgroundColor: `rgb(${color[0]}, ${color[1]}, ${color[2]})`}}
+						>
 							Today&apos;s color was <b>rgb({color[0]}, {color[1]}, {color[2]})</b>
 						</div>
-						<div className='today-stats'>
-							You scored <b>{scores[scores.length - 1]}</b> in <b>{tries[tries.length - 1]}</b> tries.
+						<div className='text-center'>
+							{didGuess ?
+								<>You guessed it in <b>{tries[tries.length - 1]}</b> {tries[tries.length - 1] === 1 ? 'try' : 'tries'}!</>
+								: <>You didn't find it today!</>
+							}
 						</div>
 					</div>
 				}
-				<div className='score-avg'>
-					<div className='window-title'>Average score</div>
-					<div className='scores-avg-value'>{scores.length ? Math.round(scores.reduce((a, b) => a + b) / scores.length) : 'No data'}</div>
-				</div>
-				<div className='guess-distrib'>
+				<div>
 					<div className='window-title'>Guess distribution</div>
 					{
 						tries.length ?
 							distribution.slice(1).map((value, index) => (
-								<div className='guess-distrib-row' key={index}>
-									<div className='guess-distrib-label'>{index + 1}</div>
-									<div className={`guess-distrib-value-bar ${value === 0 ? 'zero' : ''}`} style={{width: `${value / tries.length * 100}%`}}>{value}</div>
+								<div className='flex flex-row my-3' key={index}>
+									<div className='bg-black text-white font-slab w-6 text-center'>{index + 1}</div>
+									<div
+										className={`h-full bg-green-500 text-center`}
+										style={{
+											width: `${value / tries.length * 100}%`,
+											marginLeft: value === 0 ? '5px' : 0
+										}}
+									>
+										{value}
+									</div>
 								</div>))
 							:
 							'No data'
@@ -53,26 +98,36 @@ export default function Results({tries, scores, guesses, color, number, showToda
 				</div>
 				{
 					showToday &&
-					<button className='results-share' onClick={share}>
-						<MdShare></MdShare>
-						<span ref={shareTextRef}>Share</span>
-					</button>
+					<div className='relative flex flex-col sm:flex-row items-center justify-center'>
+						<div>
+							<div className='text-2xl font-bold text-center'>
+							Next RGBdle
+							</div>
+							<div ref={countdownRef} className='text-3xl font-[Arial] text-center'>
+								00:00:00
+							</div>
+						</div>
+						<div className='relative w-[90%] h-[1px] sm:h-24 sm:w-[1px] bg-gray-500 my-2 sm:my-0 sm:mx-12'></div>
+						<button className='bg-green-500 py-2 px-3 inline-flex flex-row items-center rounded text-white text-2xl' onClick={share}>
+							<MdShare className='mr-2' size={24}></MdShare>
+							<span ref={shareTextRef}>Share</span>
+						</button>
+					</div>
 				}
 			</div>
-		</div>
+		</div >
 	);
 }
 
 
-function shareString(guesses, color, number, score) {
-	let str = `RGBdle ${number} ${guesses.length}/10\n`;
+function shareString(guesses, color, day, didGuess) {
+	let str = `RGBdle ${day} ${didGuess ? guesses.length : 'X'}/10`;
 	for (const row of guesses) {
+		str += '\n';
 		for (const j in row) {
 			const c = row[j];
 			str += c === color[j] ? '🟩' : c < color[j] ? '🟪' : '🟧';
 		}
-		str += '\n';
 	}
-	str += `Score: ${score}/2550`;
 	return str;
 }

@@ -1,7 +1,6 @@
 import {useRef} from 'react';
-import {MdOutlineArrowForward} from 'react-icons/md';
 
-export default function RgbdleRow({entry, expected, status, submit, lock}) {
+export default function Row({entry, expected, status, submit, lock}) {
 	let cellColors = Array(3).fill('#1e293b');
 	let resultColor = 'transparent';
 	if (status === 'passed') {
@@ -29,7 +28,7 @@ export default function RgbdleRow({entry, expected, status, submit, lock}) {
 	}
 
 	return (
-		<div className='flex flex-row justify-center items-center my-3'>
+		<div className='flex flex-row justify-center items-center my-3 '>
 			{status === 'current' &&
 				<>
 					{
@@ -49,7 +48,10 @@ export default function RgbdleRow({entry, expected, status, submit, lock}) {
 							/>
 						)
 					}
-					<button className='cursor-pointer border-2 border-slate-800 rounded w-12 h-12 mx-2 outline-none focus:border-orange-500 text-center bg-slate-800 text-white' onClick={onSubmit}>
+					<button
+						className='cursor-pointer border-2 border-slate-800 rounded w-12 h-12 mx-2 outline-none focus:border-orange-500 text-center bg-slate-800 text-white'
+						onClick={onSubmit}
+					>
 						Enter
 					</button>
 				</>
@@ -72,11 +74,11 @@ export default function RgbdleRow({entry, expected, status, submit, lock}) {
 							</div>
 						)
 					}
-				<div
-					className='w-12 h-12 bg-transparent rounded mx-2'
-					style={{backgroundColor: resultColor}}
-					title={status === 'passed'  && `This is what rgb(${entry[0]}, ${entry[1]}, ${entry[2]}) looks like!`}
-				></div>
+					<div
+						className='w-12 h-12 bg-transparent rounded mx-2'
+						style={{backgroundColor: resultColor}}
+						title={status === 'passed' && `This is what rgb(${entry[0]}, ${entry[1]}, ${entry[2]}) looks like!`}
+					></div>
 				</>
 			}
 		</div>
