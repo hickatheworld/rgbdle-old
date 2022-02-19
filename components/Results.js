@@ -1,5 +1,5 @@
 import {MdClose, MdShare} from 'react-icons/md';
-import {useRef} from 'react';
+import {useRef, useState, useEffect} from 'react';
 
 export default function Results({
 	close,
@@ -11,8 +11,36 @@ export default function Results({
 	showToday,
 	tries
 }) {
+
+	const calculateTimeLeft = () => {
+		const now = new Date();
+		const next = new Date();
+		next.setDate(next.getDate() + 1);
+		next.setHours(0);
+		next.setMinutes(0);
+		next.setSeconds(0);
+		next.setMilliseconds(0);
+		const diff = next - now;
+		if (diff < 0)
+			return 'Right now!';
+		let hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+		let minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+		let seconds = Math.floor((diff % (1000 * 60)) / 1000);
+		hours = hours < 10 ? '0' + hours : hours;
+		minutes = minutes < 10 ? '0' + minutes : minutes;
+		seconds = seconds < 10 ? '0' + seconds : seconds;
+		return `${hours}:${minutes}:${seconds}`;
+	};
+
 	const shareTextRef = useRef();
-	const countdownRef = useRef();
+	const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			setTimeLeft(calculateTimeLeft());
+		}, 1000);
+		return () => clearTimeout(timer);
+	});
 	const distribution = Array(11).fill(0);
 	for (const i of tries) {
 		if (i !== -1)
@@ -27,30 +55,6 @@ export default function Results({
 			shareTextRef.current.innerText = 'Share';
 		}, 3000);
 	};
-
-	if (countdownRef.current) {
-		setInterval(() => {
-			const now = new Date();
-			const next = new Date();
-			next.setDate(next.getDate() + 1);
-			next.setHours(0);
-			next.setMinutes(0);
-			next.setSeconds(0);
-			next.setMilliseconds(0);
-			const diff = next - now;
-			if (diff < 0) {
-				countdownRef.current.innerText = 'Right now!';
-				return;
-			}
-			let hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-			let minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-			let seconds = Math.floor((diff % (1000 * 60)) / 1000);
-			hours = hours < 10 ? '0' + hours : hours;
-			minutes = minutes < 10 ? '0' + minutes : minutes;
-			seconds = seconds < 10 ? '0' + seconds : seconds;
-			countdownRef.current.innerText = `${hours}:${minutes}:${seconds}`;
-		}, 1000);
-	}
 
 	return (
 		<div className={`window-container ${isOpen ? 'open' : ''}`}>
@@ -103,8 +107,8 @@ export default function Results({
 							<div className='text-2xl font-bold text-center'>
 								Next RGBdle
 							</div>
-							<div ref={countdownRef} className='text-3xl font-[Arial] text-center'>
-								00:00:00
+							<div className='text-3xl font-[Arial] text-center'>
+								{timeLeft}
 							</div>
 						</div>
 						<div className='relative w-[90%] h-[1px] sm:h-24 sm:w-[1px] bg-gray-500 my-2 sm:my-0 sm:mx-12'></div>
@@ -117,7 +121,7 @@ export default function Results({
 			</div>
 		</div >
 	);
-}
+};
 
 
 function shareString(guesses, color, day, didGuess) {
