@@ -10,7 +10,8 @@ export default function Guide({isOpen, close}) {
 				</div>
 				<div className='window-title'>Guess the RGBDLE in ten tries.</div>
 				<div>
-					Each guess must be three valid integers between 0 and 255.
+					In computers, colors are represented by three numbers between 0 and 255, respectively for red, green and blue. Try to guess these values for 
+					the given color!
 				</div>
 				<div>
 					The first guess is the <b className='text-red-600'>RED</b> value,
