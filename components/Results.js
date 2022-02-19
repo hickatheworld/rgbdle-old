@@ -49,7 +49,7 @@ export default function Results({
 			minutes = minutes < 10 ? '0' + minutes : minutes;
 			seconds = seconds < 10 ? '0' + seconds : seconds;
 			countdownRef.current.innerText = `${hours}:${minutes}:${seconds}`;
-		}, 1000)
+		}, 1000);
 	}
 
 	return (
@@ -70,7 +70,7 @@ export default function Results({
 						<div className='text-center'>
 							{didGuess ?
 								<>You guessed it in <b>{tries[tries.length - 1]}</b> {tries[tries.length - 1] === 1 ? 'try' : 'tries'}!</>
-								: <>You didn't find it today!</>
+								: <>You didn&apos;t find it today!</>
 							}
 						</div>
 					</div>
@@ -101,7 +101,7 @@ export default function Results({
 					<div className='relative flex flex-col sm:flex-row items-center justify-center'>
 						<div>
 							<div className='text-2xl font-bold text-center'>
-							Next RGBdle
+								Next RGBdle
 							</div>
 							<div ref={countdownRef} className='text-3xl font-[Arial] text-center'>
 								00:00:00
