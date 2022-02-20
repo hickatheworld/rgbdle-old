@@ -121,7 +121,7 @@ export default function Home({color}) {
 	);
 }
 
-export async function getServerSideProps() {
+export async function getStaticsProps() {
 	const color = await getTodaysColor();
 	return {
 		props: {color}
