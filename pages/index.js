@@ -1,42 +1,54 @@
-import Guide from '../components/Guide';
-import Game from '../components/Game';
-import Results from '../components/Results';
+import Head from 'next/head';
 import {useEffect, useState} from 'react';
 import {BsQuestionCircle} from 'react-icons/bs';
 import {IoMdPodium} from 'react-icons/io';
-import {getTodaysColor} from '../lib/db';
-import Head from 'next/head';
+import Game from '../components/Game';
+import Guide from '../components/Guide';
+import Results from '../components/Results';
 
-export default function Home({color}) {
+export default function Home() {
+	const [color, setColor] = useState(undefined);
 	const [showGuide, setShowGuide] = useState(false);
 	const [save, setSave] = useState({loading: true});
+	const [stats, setStats] = useState({});
 	const [showResults, setShowResults] = useState(false);
 	useEffect(() => {
-		let save = localStorage.getItem('RGB__save');
-		try {
-			save = JSON.parse(save);
-			if (save)
-				setSave(save);
-			else throw null;
-		} catch (_) {
-			setSave({
-				day: color.day,
-				guesses: [],
-				ended: false,
-				didGuess: false
+		(async () => {
+			let res;
+			if (!color) {
+				res = await (await fetch('/api/color')).json();
+				setColor(res);
+			}
+			let save = localStorage.getItem('RGB__save');
+			setStats({
+				tries: JSON.parse(localStorage.getItem('RGB__tries') ?? '[]'),
+				scores: JSON.parse(localStorage.getItem('RGB__scores') ?? '[]')
 			});
-		}
-		if (save && save.day !== color.day) {
-			const newGuesses = {
-				day: color.day,
-				guesses: [],
-				ended: false,
-				didGuess: false
-			};
-			setSave(newGuesses);
-			localStorage.setItem('RGB__save', '');
-		}
-	}, []);
+			try {
+				save = JSON.parse(save);
+				if (save)
+					setSave(save);
+				else throw null;
+			} catch (_) {
+				setSave({
+					day: res.day,
+					guesses: [],
+					ended: false,
+					didGuess: false
+				});
+			}
+			if (save && res && save.day !== res.day) {
+				const newGuesses = {
+					day: color.day,
+					guesses: [],
+					ended: false,
+					didGuess: false
+				};
+				setSave(newGuesses);
+				localStorage.setItem('RGB__save', '');
+			}
+		})();
+	}, [color]);
 
 	const endGame = (triesCount, didGuess) => {
 		setSave({...save, ended: true, didGuess});
@@ -46,17 +58,6 @@ export default function Home({color}) {
 		localStorage.setItem('RGB__tries', JSON.stringify([...tries, didGuess ? triesCount : -1]));
 
 		setShowResults(true);
-	};
-
-	if (save.loading) {
-		return (
-			<div>loading...</div>
-		);
-	}
-
-	const stats = {
-		tries: JSON.parse(localStorage.getItem('RGB__tries') ?? '[]'),
-		scores: JSON.parse(localStorage.getItem('RGB__scores') ?? '[]')
 	};
 
 	return (
@@ -91,39 +92,41 @@ export default function Home({color}) {
           `,
 					}}
 				/>
-
 			</Head>
-			<div className='relative w-full border-b-[1px] border-gray-300 py-3 text-center font-slab text-4xl font-bold'>
-				<div>RGBdle</div>
-				<div className='absolute right-0 flex flex-row h-full top-0 items-center'>
-					<div className='mx-2 cursor-pointer' onClick={() => setShowResults(true)}>
-						<IoMdPodium size={24}></IoMdPodium>
+			{
+				!color || save.loading ?
+					<div className='flex justify-center items-center h-screen w-screen'>
+						<div className='w-12 h-12 rounded-full border-4 border-black border-t-transparent animate-spin'>
+						</div>
 					</div>
-					<div className='mx-2 cursor-pointer' onClick={() => setShowGuide(true)}>
-						<BsQuestionCircle size={24}></BsQuestionCircle>
-					</div>
-				</div>
-			</div>
-			<Guide isOpen={showGuide} close={() => setShowGuide(false)} />
-			<Game color={color.rgb} colorLabel={color.name} save={save} endGame={endGame} setSave={setSave} />
-			<Results
-				close={() => setShowResults(false)}
-				color={color.rgb}
-				day={color.day}
-				didGuess={save.didGuess}
-				guesses={save && save.guesses}
-				isOpen={showResults}
-				scores={stats.scores}
-				showToday={save.ended}
-				tries={stats.tries}
-			/>
+					:
+					<>
+						<div className='relative w-full border-b-[1px] border-gray-300 py-3 text-center font-slab text-4xl font-bold'>
+							<div>RGBdle</div>
+							<div className='absolute right-0 flex flex-row h-full top-0 items-center'>
+								<div className='mx-2 cursor-pointer' onClick={() => setShowResults(true)}>
+									<IoMdPodium size={24}></IoMdPodium>
+								</div>
+								<div className='mx-2 cursor-pointer' onClick={() => setShowGuide(true)}>
+									<BsQuestionCircle size={24}></BsQuestionCircle>
+								</div>
+							</div>
+						</div>
+						<Guide isOpen={showGuide} close={() => setShowGuide(false)} />
+						<Game color={color.rgb} colorLabel={color.name} save={save} endGame={endGame} setSave={setSave} />
+						<Results
+							close={() => setShowResults(false)}
+							color={color.rgb}
+							day={color.day}
+							didGuess={save.didGuess}
+							guesses={save && save.guesses}
+							isOpen={showResults}
+							scores={stats.scores}
+							showToday={save.ended}
+							tries={stats.tries}
+						/>
+					</>
+			}
 		</>
 	);
-}
-
-export async function getServerSideProps() {
-	const color = await getTodaysColor();
-	return {
-		props: {color}
-	};
 }

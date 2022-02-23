@@ -46,8 +46,6 @@ export default function Results({
 		if (i !== -1)
 			distribution[i]++;
 	}
-	console.log(distribution);
-
 	const share = () => {
 		navigator.clipboard.writeText(shareString(guesses, color, day, didGuess));
 		shareTextRef.current.innerText = 'Copied!';

@@ -77,7 +77,7 @@ export default function Row({entry, expected, status, submit, lock}) {
 					<div
 						className='w-12 h-12 bg-transparent rounded mx-2'
 						style={{backgroundColor: resultColor}}
-						title={status === 'passed' && `This is what rgb(${entry[0]}, ${entry[1]}, ${entry[2]}) looks like!`}
+						title={status === 'passed' ? `This is what rgb(${entry[0]}, ${entry[1]}, ${entry[2]}) looks like!` : ''}
 					></div>
 				</>
 			}
