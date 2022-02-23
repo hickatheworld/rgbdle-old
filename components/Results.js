@@ -53,9 +53,10 @@ export default function Results({
 			shareTextRef.current.innerText = 'Share';
 		}, 3000);
 	};
-
+	if (!isOpen)
+		return <></>;
 	return (
-		<div className={`window-container ${isOpen ? 'open' : ''}`}>
+		<div className='window-container'>
 			<div className='window results'>
 				<div className='window-close' onClick={close}>
 					<MdClose size={24}></MdClose>
@@ -95,7 +96,7 @@ export default function Results({
 									</div>
 								</div>))
 							:
-							'No data'
+							<div className='text-center'>No data</div>
 					}
 				</div>
 				{

@@ -2,8 +2,10 @@ import Row from './Row';
 import {MdClose} from 'react-icons/md';
 
 export default function Guide({isOpen, close}) {
+	if (!isOpen)
+		return <></>;
 	return (
-		<div className={`window-container ${isOpen ? 'open' : ''}`}>
+		<div className='window-container'>
 			<div className='window text-center'>
 				<div className='window-close' onClick={close}>
 					<MdClose size={24}></MdClose>

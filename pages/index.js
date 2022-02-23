@@ -100,8 +100,8 @@ export default function Home() {
 						</div>
 					</div>
 					:
-					<>
-						<div className='relative w-full border-b-[1px] border-gray-300 py-3 text-center font-slab text-4xl font-bold'>
+					<div className='relative overflow-auto h-screen'>
+						<div className='relative  w-full border-b-[1px] border-gray-300 py-3 text-center font-slab text-4xl font-bold'>
 							<div>RGBdle</div>
 							<div className='absolute right-0 flex flex-row h-full top-0 items-center'>
 								<div className='mx-2 cursor-pointer' onClick={() => setShowResults(true)}>
@@ -125,7 +125,7 @@ export default function Home() {
 							showToday={save.ended}
 							tries={stats.tries}
 						/>
-					</>
+					</div>
 			}
 		</>
 	);
