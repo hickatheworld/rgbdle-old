@@ -78,7 +78,6 @@ export default function Home() {
 				<meta property='twitter:title' content='RGBdle' />
 				<meta property='twitter:description' content={'RGBdle: Demonstrate your skills in design by guessing the RGB code of each day\'s color!'} />
 				<meta property='twitter:image' content='https://rgbdle.hicka.world/banner.png' />
-				<Script src='https://getinsights.io/js/insights.js'></Script>
 				<script dangerouslySetInnerHTML={{
 					__html: `
 insights.init('GXRDZKYqTAYdrDpB');
@@ -86,6 +85,7 @@ insights.trackPages();
 				`}}>
 				</script>
 			</Head>
+			<Script src='https://getinsights.io/js/insights.js'></Script>
 			{
 				!color || save.loading ?
 					<div className='flex justify-center items-center h-screen w-screen'>
