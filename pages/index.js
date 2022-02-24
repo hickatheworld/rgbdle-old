@@ -77,6 +77,13 @@ export default function Home() {
 				<meta property='twitter:title' content='RGBdle' />
 				<meta property='twitter:description' content={'RGBdle: Demonstrate your skills in design by guessing the RGB code of each day\'s color!'} />
 				<meta property='twitter:image' content='https://rgbdle.hicka.world/banner.png' />
+				<script src='https://getinsights.io/js/insights.js'></script>
+				<script dangerouslySetInnerHTML={{
+					__html: `
+insights.init('GXRDZKYqTAYdrDpB');
+insights.trackPages();
+				`}}>
+				</script>
 			</Head>
 			{
 				!color || save.loading ?
@@ -96,10 +103,10 @@ export default function Home() {
 								shadow-2xl shadow-black
 								'
 							>
-									<div
-										className='absolute right-3 cursor-pointer'
-										onClick={() => setShowWarn(false)}
-									>
+								<div
+									className='absolute right-3 cursor-pointer'
+									onClick={() => setShowWarn(false)}
+								>
 									<MdClose size={24}></MdClose>
 								</div>
 								<div>
