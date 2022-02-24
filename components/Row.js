@@ -42,14 +42,6 @@ export default function Row({entry, expected, status, submit, lock}) {
 								max={255}
 								pattern='\d*'
 								className='appearance-none border-2 border-gray-700 rounded w-12 h-12 p-2 mx-2 outline-none focus:border-orange-500 text-center transition-colors duration-200'
-								disabled={lock[i]}
-								defaultValue={lock[i] ? expected[i] : ''}
-								style={{
-									backgroundColor: lock[i] ? '#49da1e' : 'auto',
-									color: lock[i] ? '#fff' : '#1e293b',
-									borderColor: lock[i] ? '#49da1e' : '#1e293b',
-									fontWeight: lock[i] ? 'bold' : 'normal',
-								}}
 								data-lpignore={true}
 								data-form-type='other'
 								autoComplete='off'

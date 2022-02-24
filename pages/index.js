@@ -47,7 +47,6 @@ export default function Home() {
 					ended: false,
 					didGuess: false
 				};
-				setSave(newGuesses);
 				localStorage.setItem('RGB__save', '');
 			}
 		})();
@@ -63,7 +62,7 @@ export default function Home() {
 		setShowResults(true);
 	};
 	return (
-		<>
+		<div>
 			<Head>
 				<title>RGBdle</title>
 				<meta name='title' content='RGBdle' />
@@ -78,14 +77,7 @@ export default function Home() {
 				<meta property='twitter:title' content='RGBdle' />
 				<meta property='twitter:description' content={'RGBdle: Demonstrate your skills in design by guessing the RGB code of each day\'s color!'} />
 				<meta property='twitter:image' content='https://rgbdle.hicka.world/banner.png' />
-				<script dangerouslySetInnerHTML={{
-					__html: `
-insights.init('GXRDZKYqTAYdrDpB');
-insights.trackPages();
-				`}}>
-				</script>
 			</Head>
-			<Script src='https://getinsights.io/js/insights.js'></Script>
 			{
 				!color || save.loading ?
 					<div className='flex justify-center items-center h-screen w-screen'>
@@ -133,11 +125,6 @@ insights.trackPages();
 							save={save}
 							endGame={endGame}
 							setSave={setSave}
-							lock={[
-								save.guesses[save.guesses.length - 1][0] === color.rgb[0],
-								save.guesses[save.guesses.length - 1][1] === color.rgb[1],
-								save.guesses[save.guesses.length - 1][2] === color.rgb[2]
-							]}
 						/>
 						<Results
 							close={() => setShowResults(false)}
@@ -152,6 +139,6 @@ insights.trackPages();
 						/>
 					</div>
 			}
-		</>
+		</div>
 	);
-}
+};
