@@ -31,7 +31,7 @@ export default function Home() {
 				else throw null;
 			} catch (_) {
 				setSave({
-					day: res.day,
+					day: res ? res.day : color.day,
 					guesses: [],
 					ended: false,
 					didGuess: false
@@ -39,7 +39,7 @@ export default function Home() {
 			}
 			if (save && res && save.day !== res.day) {
 				const newGuesses = {
-					day: color.day,
+					day: res ? res.day : color.day,
 					guesses: [],
 					ended: false,
 					didGuess: false
