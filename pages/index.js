@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Script from 'next/script';
 import {useEffect, useState} from 'react';
 import {BsQuestionCircle} from 'react-icons/bs';
 import {IoMdPodium} from 'react-icons/io';
@@ -77,7 +78,7 @@ export default function Home() {
 				<meta property='twitter:title' content='RGBdle' />
 				<meta property='twitter:description' content={'RGBdle: Demonstrate your skills in design by guessing the RGB code of each day\'s color!'} />
 				<meta property='twitter:image' content='https://rgbdle.hicka.world/banner.png' />
-				<script src='https://getinsights.io/js/insights.js'></script>
+				<Script src='https://getinsights.io/js/insights.js'></Script>
 				<script dangerouslySetInnerHTML={{
 					__html: `
 insights.init('GXRDZKYqTAYdrDpB');
