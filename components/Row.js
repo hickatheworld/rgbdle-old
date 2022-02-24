@@ -1,4 +1,5 @@
 import {useRef} from 'react';
+import {BsFillMoonStarsFill} from 'react-icons/bs';
 
 export default function Row({entry, expected, status, submit, lock}) {
 	let cellColors = Array(3).fill('#1e293b');
@@ -10,6 +11,7 @@ export default function Row({entry, expected, status, submit, lock}) {
 	const refs = [useRef(), useRef(), useRef()];
 	let onSubmit;
 	if (status === 'current') {
+		console.log(lock);
 		onSubmit = () => {
 			const values = refs.map(r => parseInt(r.current.value));
 			let err = false;
@@ -42,6 +44,12 @@ export default function Row({entry, expected, status, submit, lock}) {
 								className='appearance-none border-2 border-gray-700 rounded w-12 h-12 p-2 mx-2 outline-none focus:border-orange-500 text-center transition-colors duration-200'
 								disabled={lock[i]}
 								defaultValue={lock[i] ? expected[i] : ''}
+								style={{
+									backgroundColor: lock[i] ? '#49da1e' : 'auto',
+									color: lock[i] ? '#fff' : '#1e293b',
+									borderColor: lock[i] ? '#49da1e' : '#1e293b',
+									fontWeight: lock[i] ? 'bold' : 'normal',
+								}}
 								data-lpignore={true}
 								data-form-type='other'
 								autoComplete='off'

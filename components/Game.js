@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import Row from './Row';
 
-export default function Game({color, colorLabel, endGame, save, setSave}) {
+export default function Game({color, colorLabel, endGame, save, setSave, lock}) {
 	const [guesses, setGuesses] = useState(save.guesses ?? []);
 	const submit = (red, green, blue) => {
 		guesses = [...guesses, [red, green, blue]];
@@ -31,8 +31,8 @@ export default function Game({color, colorLabel, endGame, save, setSave}) {
 						entry={guesses[index]}
 						expected={color}
 						submit={submit}
+						lock={lock}
 						key={index}
-						lock={[false, false, false]}
 					/>
 				)}
 			</div>

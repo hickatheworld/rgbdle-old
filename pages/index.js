@@ -113,7 +113,18 @@ export default function Home() {
 							</div>
 						</div>
 						<Guide isOpen={showGuide} close={() => setShowGuide(false)} />
-						<Game color={color.rgb} colorLabel={color.name} save={save} endGame={endGame} setSave={setSave} />
+						<Game
+							color={color.rgb}
+							colorLabel={color.name}
+							save={save}
+							endGame={endGame}
+							setSave={setSave}
+							lock={[
+								save.guesses[save.guesses.length - 1][0] === color.rgb[0],
+								save.guesses[save.guesses.length - 1][1] === color.rgb[1],
+								save.guesses[save.guesses.length - 1][2] === color.rgb[2]
+							]}
+						/>
 						<Results
 							close={() => setShowResults(false)}
 							color={color.rgb}
